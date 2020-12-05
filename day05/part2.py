@@ -15,43 +15,25 @@ def recursiva_functiona(state, result, bpass):
         elif bpass[state] == "F" or bpass[state] == "L":
             result = result[0]
         return recursiva_functiona(state, result, bpass)
-
-    elif bpass[state] == "R" or bpass[state] == "B":
-        middle = findMiddle(result, "U")
-        result = range(middle, result[-1]+1)
+    else:
+        result = findMiddle(result, bpass[state])
         state += 1
         return recursiva_functiona(state, result, bpass)
-    
-    elif bpass[state] == "F" or bpass[state] == "L":
-        middle = findMiddle(result, "L")
-        result = range(result[0],middle)
-        state +=1
-        return recursiva_functiona(state, result, bpass)
-
 
 def findMiddle(input_list, direction):
     middle = float(len(input_list))/2
-    if direction == "U":
-        return (input_list[int(middle + .5)])
-    if direction == "L":
-        return (input_list[int(middle)])
+    if direction == "R" or direction == "B":
+        return range((input_list[int(middle + .5)]), input_list[-1]+1)
+    if direction == "F" or direction == "L":
+        return range(input_list[0],(input_list[int(middle)]))
 
 for i in boardingpasses:
     row = recursiva_functiona(0, range(127), i[:7])
     seat = recursiva_functiona(0, range(7), i[7:])
-    seatID = (row * 8) + seat
-    lista.append(seatID)
+    lista.append((row * 8) + seat)
 
 for i in range(min(lista),max(lista)):
-    plus = False
-    minus = False
-    if i in lista:
-        continue
-    if i + 1 in lista:
-        plus = True
-    if i - 1 in lista:
-        minus = True
-    if plus == True and minus == True:
+    if i not in lista and i + 1 in lista and i - 1 in lista:
         print("My Seat number is: " + str(i))
 
 print("--- %s seconds ---" % (time.time() - start_time))
