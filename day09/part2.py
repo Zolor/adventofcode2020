@@ -16,3 +16,4 @@ for counter in range(len(int_lista)):
             print(max(int_lista[counter:counter + preamble]) + min(int_lista[counter:counter + preamble]))
             quit()
         preamble += 1
+
