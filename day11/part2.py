@@ -15,8 +15,11 @@ def runda(array):
         tmp_row = ""
         checker = ()
         for x, seat in enumerate(row):
+            offset_list = []
             for offset in range(1, len_array):
-                if x == 0 and y == 0: # Check if we're in a corner
+                if offset > x or offset > y:
+                    break
+                elif x == 0 and y == 0: # Check if we're in a corner
                     checker = (".", ".", array[y][x + offset], array[y + offset][x + offset], array[y + offset][x], ".", ".", ".")
                 elif y == 0 and x == len_array:
                     checker = (".", ".", ".", ".", array[y + offset][x], array[y + offset][x - offset, array[y][x - offset] , "."])
@@ -34,20 +37,21 @@ def runda(array):
                     checker = (array[y - offset][x], array[y - offset][x + offset], array[y][x + offset], ".", ".", ".", array[y][x - offset], array[y - offset][x - offset])
                 else:
                     checker = (array[y - offset][x], array[y - offset][x + offset], array[y][x + offset], array[y + offset][x + offset], array[y + offset][x], array[y + offset][x - offset], array[y][x - offset], array[y - offset][x - offset])
-                if seat == "L":
-                    if "#" not in checker and offset == len_array:
-                        tmp_row += "#"
-                        break
-                    elif "#" in checker:
-                        tmp_row += "L"
-                        break
-                elif array[y][x] == ".":
-                    tmp_row += "."
-                elif array[y][x] == "#":
-                    if checker.count("#") > 3:
-                        tmp_row += "L"
-                    else:
-                        tmp_row += "#"
+                offset_list.append(checker)
+            if seat == "L":
+                if offset == len_array "#" and not in checker:
+                    tmp_row += "#"
+                    break
+                elif "#" in checker:
+                    tmp_row += "L"
+                    break
+            elif array[y][x] == ".":
+                tmp_row += "."
+            elif array[y][x] == "#":
+                if checker.count("#") > 3:
+                    tmp_row += "L"
+                else:
+                    tmp_row += "#"
         tmp_array.append(tmp_row)
     return(tmp_array)
 
