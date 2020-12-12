@@ -1,70 +1,44 @@
-seatlist = open("input.txt").read().split("\n")
-arr = []
+from copy import deepcopy
+
+seatlist = [list(l) for l in open("input.txt").read().split("\n")]
+tmp_array = []
 state = True
 summa = 0
 
-for i in seatlist:
-    arr += [i]
-
-len_array = len(arr[0]) - 1
-height_array = len(arr) - 1
+len_array = len(seatlist[0])
+height_array = len(seatlist)
 
 def runda(array):
-    tmp_array = []
-    for y, row in enumerate(array):
-        tmp_row = ""
-        checker = ()
-        for x, seat in enumerate(row):
-            offset_list = []
-            for offset in range(1, len_array):
-                if offset > x or offset > y:
-                    break
-                elif x == 0 and y == 0: # Check if we're in a corner
-                    checker = (".", ".", array[y][x + offset], array[y + offset][x + offset], array[y + offset][x], ".", ".", ".")
-                elif y == 0 and x == len_array:
-                    checker = (".", ".", ".", ".", array[y + offset][x], array[y + offset][x - offset, array[y][x - offset] , "."])
-                elif x == 0 and y == height_array:
-                    checker = (array[y - offset][x], array[y - offset][x + offset], array[y][x + offset], ".", ".", ".", ".", ".")
-                elif y == height_array and x == len_array:
-                    checker = (array[y - offset][x], ".", ".", ".", ".", ".", array[y][x - offset], array[y - offset][x - offset])
-                elif y == 0: # Check if we're at the top not corner
-                    checker = (".", ".", array[y][x + offset], array[y + offset][x + offset], array[y + offset][x], array[y + offset][x - offset], array[y][x - offset], ".")
-                elif x == 0: # Check if we're at the left side not corner
-                    checker = (array[y - offset][x], array[y - offset][x + offset], array[y][x + offset], array[y + offset][x + offset], array[y + offset][x])
-                elif x == len_array: # Check if we're on the right side not corner
-                    checker = (array[y - offset][x], ".", ".", ".", array[y + offset][x], array[y + offset][x - offset], array[y][x - offset], array[y - offset][x - offset])
-                elif y == height_array: # Check if we're on the bottom not corner
-                    checker = (array[y - offset][x], array[y - offset][x + offset], array[y][x + offset], ".", ".", ".", array[y][x - offset], array[y - offset][x - offset])
-                else:
-                    checker = (array[y - offset][x], array[y - offset][x + offset], array[y][x + offset], array[y + offset][x + offset], array[y + offset][x], array[y + offset][x - offset], array[y][x - offset], array[y - offset][x - offset])
-                offset_list.append(checker)
-            if seat == "L":
-                if offset == len_array "#" and not in checker:
-                    tmp_row += "#"
-                    break
-                elif "#" in checker:
-                    tmp_row += "L"
-                    break
-            elif array[y][x] == ".":
-                tmp_row += "."
-            elif array[y][x] == "#":
-                if checker.count("#") > 3:
-                    tmp_row += "L"
-                else:
-                    tmp_row += "#"
-        tmp_array.append(tmp_row)
+    tmp_array = deepcopy(array)
+    for row in range(height_array):
+        for seat in range(len_array):
+            checker = 0
+            for rowc in [-1,0,1]:
+                for seatc in [-1,0,1]:
+                    if not (rowc == 0 and seatc == 0):
+                        new_row = row + rowc
+                        new_seat = seat + seatc
+                        while 0 <= new_row < height_array and 0 <= new_seat < len_array and array[new_row][new_seat]==".":
+                            new_row = new_row + rowc
+                            new_seat = new_seat + seatc
+                        if 0 <= new_row < height_array and 0 <= new_seat < len_array and array[new_row][new_seat]=="#":
+                            checker += 1
+            if array[row][seat] == "L":
+                if checker == 0:
+                    tmp_array[row][seat] = "#"
+            elif array[row][seat] == "#" and checker >= 5:
+                tmp_array[row][seat] = "L"
     return(tmp_array)
 
-
 while state == True:
-    tmp_arr = runda(arr)
-    if tmp_arr != arr:
-        arr = tmp_arr
+    tmp_arr = runda(seatlist)
+    if tmp_arr != seatlist:
+        seatlist = tmp_arr
     else:
-        arr = tmp_arr
+        seatlist = tmp_arr
         state = False
 
-for elem in arr:
+for elem in seatlist:
     summa += elem.count("#")
 
 print(summa)
