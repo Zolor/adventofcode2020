@@ -14,7 +14,7 @@ def runda(array):
     for y, row in enumerate(array):
         tmp_row = ""
         checker = ()
-        for x, seat in enumerate(row):
+        for x, _ in enumerate(row):
             if x == 0 and y == 0: # Check if we're in a corner
                 checker = (array[y][x + 1], array[y + 1][x], array[y + 1][x + 1])
             elif y == 0 and x == len_array:
@@ -50,9 +50,6 @@ def runda(array):
 
 
 while state == True:
-#     for i in arr:
-#       print(i)
-#    print("-------------------------------")
     tmp_arr = runda(arr)
     if tmp_arr != arr:
         arr = tmp_arr
