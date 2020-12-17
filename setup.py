@@ -35,9 +35,6 @@ session_cookie = {"name": "session", "value": "<Session cookie>"}
 # initialize driver object and change the <path_to_chrome_driver> depending on your directory where your chromedriver should be
 driver = webdriver.Chrome(chrome_options=chrome_options, executable_path="<path_to_chrome_driver>")
 
-# change the <path_to_place_downloaded_file> to your directory where you would like to place the downloaded file
-download_dir = os.getcwd()
-
 # URLs we need
 url = "https://adventofcode.com/2020/day/"
 url_input = "https://adventofcode.com/2020/day/" + day + "/input"
