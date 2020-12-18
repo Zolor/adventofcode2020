@@ -1,7 +1,7 @@
 from typing import NamedTuple
 from copy import deepcopy
 
-data = open("input.txt").read().split("\n")
+data = open("testinput.txt").read().split("\n")
 cycle = 0
 max_cycles = 6
 summa = 0
