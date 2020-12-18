@@ -46,9 +46,9 @@ def decoupler(line):
                 break
     return(line)
 
-for lina in math:
-    lina = [c for word in lina.split() for c in word]
-    res = decoupler(lina)
+for line in math:
+    line = [c for word in line.split() for c in word]
+    res = decoupler(line)
     summa += calculator(res)
 
 print(summa)
