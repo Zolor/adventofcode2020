@@ -27,7 +27,6 @@ def decoupler(line):
                 break
             elif n == ")" and count == 1:
                 end = x
-                #Replace our () with a sum in the list
                 tmp = calculator([i for i in line[start + 1:end]])
                 del line[start:end + 1]
                 line.insert(start, str(tmp))
