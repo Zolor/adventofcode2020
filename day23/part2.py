@@ -1,3 +1,5 @@
+import time
+start_time = time.time()
 data = open("input.txt").read()
 
 clock = [int(i) for i in data]
@@ -42,3 +44,4 @@ first = clock_dict[1]
 second = clock_dict[clock_dict[1]]
 
 print(first * second)
+print("--- %s seconds ---" % (time.time() - start_time))
