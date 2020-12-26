@@ -1,4 +1,6 @@
-data = open("testinput.txt").read().split("\n")
+from copy import deepcopy
+
+data = open("input.txt").read().split("\n")
 
 floor = {}
 
@@ -36,60 +38,64 @@ for line in data:
     else:
         floor[tmp_tile] = True
 
+def flipper(tile):
+    tmp_set = set()
+    collect_black = 0
+    #Check southeast, southwest, northwest, and northeast
+    #True = Black, White = False
+    for x in [-1, 1]:
+        for y in [-0.5, 0.5]:
+            if (tile[0] + x, tile[1] + y) not in floor:
+                tmp_set.add((tile[0] + x, tile[1] + y))
+            elif floor[(tile[0] + x, tile[1] + y)] == True:
+                collect_black += 1
+            else:
+                tmp_set.add((tile[0] + x, tile[1] + y))
+    #Check East
+    if (tile[0],tile[1] + 1) in floor:
+        if floor[(tile[0],tile[1] + 1)] == True:
+            collect_black += 1
+        else:
+            tmp_set.add((tile[0],tile[1] + 1))
+    else:
+        tmp_set.add((tile[0],tile[1] + 1))
+    #Check West
+    if (tile[0],tile[1] - 1) in floor:
+        if floor[(tile[0],tile[1] - 1)] == True:
+            collect_black += 1
+        else:
+            tmp_set.add((tile[0],tile[1] - 1))
+    else:
+        tmp_set.add((tile[0],tile[1] - 1))
+    return collect_black, tmp_set
+
+days = 0
+while days < 100:
+    tmp_floor = {}
+    orig_tmp_set = set()
+    for tile in floor.keys():
+        if floor[tile] == False:
+            continue
+        collect, tmp_set2 = flipper(tile)
+        orig_tmp_set |= tmp_set2
+        #Count how many tiles and act accordingly to our tile color True = Black False = White
+        if collect == 0 or collect > 2:
+            tmp_floor[tile] = False
+        else:
+            tmp_floor[tile] = True
+    for white_tile in orig_tmp_set:
+        collect, _ = flipper(white_tile)
+        if collect == 2:
+            tmp_floor[white_tile] = True
+        else:
+            tmp_floor[white_tile] = False
+
+    floor = deepcopy(tmp_floor)
+    days += 1
+
 summa = 0
 for item in floor.values():
     if item == True:
         summa += 1
 
 print(summa)
-
-days = 1
-while days < 2:
-    tmp_floor = {}
-    for tile in floor.keys():
-        collect = {"black": 0, "white": 0}
-        #Check southeast, southwest, northwest, and northeast
-        for x in [-1, 1]:
-            for y in [-0.5, 0.5]:
-                if (tile[0] + x, tile[1] + y) not in floor:
-                    collect["white"] += 1
-                    tmp_floor[(tile[0] + x, tile[1] + y)] = False
-                elif floor[(tile[0] + x, tile[1] + y)] == True:
-                    collect["black"] += 1
-                else:
-                    collect["white"] += 1
-        #Check East
-        if (tile[0],tile[1] + y) in floor:
-            if floor[(tile[0],tile[1] + y)] == True:
-                collect["black"] += 1
-            else:
-                collect["white"] += 1
-        else:
-            collect["white"] += 1
-            tmp_floor[(tile[0],tile[1] + y)] = False
-        #Check West
-        if (tile[0],tile[1] - y) in floor:
-            if floor[(tile[0],tile[1] - y)] == True:
-                collect["black"] += 1
-            else:
-                collect["white"] += 1
-        else:
-            collect["white"] += 1
-            tmp_floor[(tile[0],tile[1] - y)] = False
-        print(collect)
-        #Count how many tiles and act accordingly to our tile color True = Black False = White
-        if floor[tile] == True and (collect["black"] == 0 or collect["black"] > 2):
-            tmp_floor[tile] = False
-        elif floor[tile] == False and collect["black"] == 2:
-            tmp_floor[tile] = True
-        else:
-            tmp_floor[tile] = floor.get(tile)
-    floor = tmp_floor
-    days += 1
-
-    summa = 0
-    for item in floor.values():
-        if item == True:
-            summa += 1
-
-    print(summa)
